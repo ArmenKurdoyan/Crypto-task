@@ -30,3 +30,27 @@
     transform: rotate(360deg);
   }
 }
+
+/*MOve to smaller CSS components*/
+
+
+/*Header*/
+.title {
+  margin-bottom: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+}
+
+/*Left Header*/
+.leftHeader, .rightHeader {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.item {
+  margin-left: 5px;
+  margin-right: 5px;
+}

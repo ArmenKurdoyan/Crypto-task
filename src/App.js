@@ -1,25 +1,76 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Header from './components/Header';
+import Table from './components/Table';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedList: `Top 100 Cryptocurrencies by Market Capitalization`,
+      valume: `USD`,
+      sortName: `name`,
+      currentPage: 3,
+      maxPages: 5,
+      showAll: false,
+      companies: undefined,
+    }
+
+    this.handleChangeList = this.handleChangeList.bind(this);
+    this.handleChangeValume = this.handleChangeValume.bind(this);
+    this.handleChangePageDown = this.handleChangePageDown.bind(this);
+    this.handleChangePageUp = this.handleChangePageUp.bind(this);
+    this.handleShowAll = this.handleShowAll.bind(this);
+  }
+
+  handleChangeList(event) {
+    this.setState({
+      selectedList: event.target.value,
+    })
+  }
+
+  handleChangeValume(event) {
+    this.setState({
+      valume: event.target.value,
+    })
+  }
+
+  handleChangePageUp() {
+    this.setState({
+      currentPage: ++this.state.currentPage,
+      showAll: false,
+    })
+  }
+
+  handleChangePageDown() {
+    this.setState({
+      currentPage: --this.state.currentPage,
+      showAll: false,
+    })
+  }
+
+  handleShowAll() {
+    this.setState({
+      showAll: true,
+    })
+    alert(`done`);
+  }
+
   render() {
+    const data = {
+      ...this.state,
+      handleChangeList: this.handleChangeList,
+      handleChangeValume: this.handleChangeValume,
+      handleChangePageUp: this.handleChangePageUp,
+      handleChangePageDown: this.handleChangePageDown,
+      handleShowAll: this.handleShowAll,
+    }
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Header data={data}/>
+        <Table data={data}/>
       </div>
     );
   }
