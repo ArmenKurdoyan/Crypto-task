@@ -22,15 +22,6 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /*MOve to smaller CSS components*/
 
 
@@ -53,4 +44,12 @@
 .item {
   margin-left: 5px;
   margin-right: 5px;
+}
+
+/*Table*/
+
+.table {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
