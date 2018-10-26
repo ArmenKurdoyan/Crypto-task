@@ -32,7 +32,7 @@
 
 .header {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
 }
 
 /*Left Header*/
