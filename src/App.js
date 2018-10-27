@@ -8,28 +8,58 @@ class App extends Component {
     super(props);
 
     this.state = {
-      sortName: `id`,
-      nextPage: true,
+      viewAll: false,
       currentPage: 1,
-      companies: undefined,
+      data: undefined,
     }
+
+    this.getCount = this.getCount.bind(this);
+    this.handleChangePageUp = this.handleChangePageUp.bind(this);
+    this.handleChangePageDown = this.handleChangePageDown.bind(this);
+    this.handleShowAll = this.handleShowAll.bind(this);
+  }
+
+  getCount(count) {
+    this.setState({
+      data: count,
+    })
+  }
+
+  handleShowAll() {
+    this.setState({
+      viewAll: !this.state.viewAll,
+      currentPage: 1,
+    })
+  }
+
+  handleChangePageUp() {
+    this.setState({
+      currentPage: ++this.state.currentPage,
+    })
+  }
+
+  handleChangePageDown() {
+    this.setState({
+      currentPage: --this.state.currentPage,
+    })
   }
 
   render() {
     const data = {
       ...this.state,
-      // handleChangeList: this.handleChangeList,
-      // handleChangeValume: this.handleChangeValume,
-      // handleChangePageUp: this.handleChangePageUp,
-      // handleChangePageDown: this.handleChangePageDown,
-      // handleShowAll: this.handleShowAll,
+      changeUp: this.handleChangePageUp,
+      changeDown: this.handleChangePageDown,
+      showAll: this.handleShowAll,
     }
 
     return (
       <div className="App">
         <h1>All CryptoCurrencies</h1>
         <Header data={data}/>
-        <Table data={data}/>
+        <Table 
+          getCount={this.getCount}
+          currentPage={this.state.currentPage} 
+          viewAll={this.state.viewAll}/>
       </div>
     );
   }
