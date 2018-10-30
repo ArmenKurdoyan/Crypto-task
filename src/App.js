@@ -54,7 +54,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1>All CryptoCurrencies</h1>
+        <h1 className="title">All CryptoCurrencies</h1>
         <Header data={data}/>
         <Table 
           getCount={this.getCount}

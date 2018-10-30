@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Tbody from './Tbody';
-import Thead from './Thead';
+import Thead from './Thead/Thead';
+import Tbody from './Tbody/Tbody';
+import './Table.css';
 
 export default class Table extends Component {
     constructor(props) {
@@ -9,7 +10,8 @@ export default class Table extends Component {
         this.state = {
             data: [],
             toShow: [],
-            sortBy: `rank`,
+            sortingReverse: false,
+            sortBy: 'rank',
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -30,41 +32,43 @@ export default class Table extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
+            document.getElementById(this.state.sortBy).style.display = `none`;
             if (this.props.viewAll) {
                 this.setState({
                     toShow: this.state.data,
                 })
             } else {
-                const x = this.state.data.slice(20 * (this.props.currentPage - 1), 20 * this.props.currentPage);
+                const tempToShow = this.state.data.slice(20 * (this.props.currentPage - 1), 20 * this.props.currentPage);
                 this.setState({
-                    toShow: x,
+                    toShow: tempToShow,
                 })
             }
         }
     }
 
     handleClick(event) {
-
         let tempArray = this.state.toShow;
+        let arrowReverse = undefined;
         
         if (event === this.state.sortBy) {
+            document.getElementById(this.state.sortBy).style.display = `block`;
             tempArray = this.state.toShow.reverse();
+            arrowReverse = !this.state.sortingReverse;
         } 
-        console.log(tempArray);
         if (event !== this.state.sortBy) {
+            document.getElementById(this.state.sortBy).style.display = `none`;
+            document.getElementById(event).style.display = `block`;
+            arrowReverse = false;
             tempArray.sort(function(a, b) {
-
                 if (a[event] === undefined) {
-                    console.log(event);
-                    console.log(a.quotes.USD[event])
                     a = a.quotes.USD;
                     b = b.quotes.USD;
                 }
 
-                if (a[event] > b[event]) {
+                if (a[event] < b[event]) {
                   return 1;
                 }
-                if (a[event] < b[event]) {
+                if (a[event] > b[event]) {
                   return -1;
                 }
                 return 0;
@@ -73,20 +77,20 @@ export default class Table extends Component {
         this.setState({
             toShow: tempArray,
             sortBy: event,
+            sortingReverse: arrowReverse,
         })
     }
 
     render() {
         return (
             <table className="table">
-                <thead>
+                <tbody>
                     <Thead 
                         sort={this.handleClick} 
                         arrowStatus = {this.state.sortingReverse}/>
                     <Tbody data={this.state.toShow}/> 
-                </thead>
+                </tbody>
             </table>
         );
     }
 }
-
