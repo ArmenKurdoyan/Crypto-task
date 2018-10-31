@@ -9,10 +9,11 @@ export default class Table extends Component {
 
         this.state = {
             data: [],
-            toShow: [],
             sortingReverse: false,
             sortBy: 'rank',
         }
+        this.showArrow = false;
+        this.showTable = this.showTable.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
 
@@ -25,60 +26,66 @@ export default class Table extends Component {
                 data: resp.data.sort(function(a, b){
                         return a.rank - b.rank;
                     }),
-                toShow: resp.data.slice(20 * (this.props.currentPage - 1), 20 * this.props.currentPage),
             })
         });
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            document.getElementById(this.state.sortBy).style.display = `none`;
-            if (this.props.viewAll) {
-                this.setState({
-                    toShow: this.state.data,
-                })
-            } else {
-                const tempToShow = this.state.data.slice(20 * (this.props.currentPage - 1), 20 * this.props.currentPage);
-                this.setState({
-                    toShow: tempToShow,
-                })
-            }
+        this.showArrow = false;
+        if (prevProps.currentPage !== this.props.currentPage) {
+            this.setState({
+                sortBy: `rank`,
+                sortingReverse: false,
+            })
         }
     }
 
-    handleClick(event) {
-        let tempArray = this.state.toShow;
-        let arrowReverse = undefined;
-        
-        if (event === this.state.sortBy) {
-            document.getElementById(this.state.sortBy).style.display = `block`;
-            tempArray = this.state.toShow.reverse();
-            arrowReverse = !this.state.sortingReverse;
-        } 
-        if (event !== this.state.sortBy) {
-            document.getElementById(this.state.sortBy).style.display = `none`;
-            document.getElementById(event).style.display = `block`;
-            arrowReverse = false;
+    showTable() {
+        let tempArray = this.props.viewAll ? (this.state.data) : (this.state.data.slice(20 * (this.props.currentPage - 1), 20 * this.props.currentPage));
+        const item = this.state.sortBy;
+        if (!this.state.sortingReverse) {
             tempArray.sort(function(a, b) {
-                if (a[event] === undefined) {
+                if (a[item] === undefined) {
                     a = a.quotes.USD;
                     b = b.quotes.USD;
                 }
-
-                if (a[event] < b[event]) {
+                if (a[item] > b[item]) {
                   return 1;
                 }
-                if (a[event] > b[event]) {
+                if (a[item] < b[item]) {
                   return -1;
                 }
                 return 0;
-              });
+            });
+        } else {
+            tempArray.sort(function(a, b) {
+                if (a[item] === undefined) {
+                    a = a.quotes.USD;
+                    b = b.quotes.USD;
+                }
+                if (a[item] < b[item]) {
+                  return 1;
+                }
+                if (a[item] > b[item]) {
+                  return -1;
+                }
+                return 0;
+            });
         }
+        return <Tbody data={tempArray}/>
+    }
+
+    handleClick(event) {
+        this.showArrow = true;
+        let arrowReverse = null;
+        arrowReverse = event === this.state.sortBy ? 
+        (arrowReverse = !this.state.sortingReverse) : 
+        (arrowReverse = false);
+        
         this.setState({
-            toShow: tempArray,
             sortBy: event,
             sortingReverse: arrowReverse,
-        })
+        })      
     }
 
     render() {
@@ -87,8 +94,10 @@ export default class Table extends Component {
                 <tbody>
                     <Thead 
                         sort={this.handleClick} 
-                        arrowStatus = {this.state.sortingReverse}/>
-                    <Tbody data={this.state.toShow}/> 
+                        arrowDirection={this.state.sortingReverse}
+                        currentArrow={this.state.sortBy}
+                        arrowStatus={this.showArrow}/>
+                    {this.showTable()} 
                 </tbody>
             </table>
         );

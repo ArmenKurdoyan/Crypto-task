@@ -55,11 +55,13 @@ class App extends Component {
     return (
       <div className="App">
         <h1 className="title">All CryptoCurrencies</h1>
-        <Header data={data}/>
-        <Table 
-          getCount={this.getCount}
-          currentPage={this.state.currentPage} 
-          viewAll={this.state.viewAll}/>
+        <div className="context">
+          <Header data={data}/>
+          <Table 
+            getCount={this.getCount}
+            currentPage={this.state.currentPage} 
+            viewAll={this.state.viewAll}/>
+        </div>
       </div>
     );
   }
