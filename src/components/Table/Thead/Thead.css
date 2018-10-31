@@ -1,0 +1,33 @@
+
+.head-element {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 1s, color 1s; 
+}
+
+.head-element:hover {
+    background-color: rgb(37, 166, 175); 
+    color: white;
+}
+
+.row {
+    border-bottom: 1px solid rgb(37, 166, 175); 
+}
+
+.arrow-down {
+    float: left;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid white;
+}
+
+.arrow-up {
+    float: left;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid white;
+}
